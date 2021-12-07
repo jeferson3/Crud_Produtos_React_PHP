@@ -6,6 +6,32 @@ require_once ROOT_DIR . '/src/classes/ProductClass.php';
 final class Product extends Model
 {
 
+    public function paginate($limit = 10, $offset = 0)
+    {
+        try {
+
+            $sql = "SELECT * from products limit :limit offset :offset";
+            $query = $this->con->prepare($sql);
+            $query->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $query->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+            $data = array('result' => array(), 'total' => 0);
+
+            if ($query->execute() && $query->rowCount() > 0){
+                foreach ($query->fetchAll() as $value){
+                    array_push($data['result'], (new ProductClass($value)));
+                }
+                $data['page'] = $offset + 1;
+                $data['total'] = count($this->all());
+            }
+            return $data;
+        }
+        catch (\Exception $exception){
+            var_dump($exception);
+        }
+        return false;
+    }
+
     /**
      * return product by id
      *
@@ -47,7 +73,7 @@ final class Product extends Model
             $query = $this->con->query($sql);
             $data = array();
 
-            if ($query && $query->rowCount() > 0){
+            if ($query->execute() && $query->rowCount() > 0){
                 foreach ($query->fetchAll() as $value){
                     array_push($data, (new ProductClass($value)));
                 }
@@ -72,12 +98,15 @@ final class Product extends Model
 
         try {
 
-            $sql = "INSERT into products (name, price, is_perishable, purchase_time) values (:name, :price, :is_perishable, :purchase_time)";
+            $sql = "INSERT into products (name, price, is_perishable, purchase_time, category_id) 
+                        values (:name, :price, :is_perishable, :purchase_time, :category_id)";
+
             $query = $this->con->prepare($sql);
             $query->bindValue(':name', $product->getName());
             $query->bindValue(':price', $product->getPrice());
             $query->bindValue(':is_perishable', $product->getIsPerishable());
             $query->bindValue(':purchase_time', $product->getPurchaseTime());
+            $query->bindValue(':category_id', $product->getCategoryId());
 
             return $query->execute();
         }
@@ -103,7 +132,6 @@ final class Product extends Model
             return $query->execute();
         }
         catch (PDOException $exception){
-            var_dump($exception);
             return false;
         }
     }
@@ -118,7 +146,7 @@ final class Product extends Model
     {
         try {
 
-            $sql = 'UPDATE products set name=:name, price=:price, isPerishable=:isPerishable, purchase_time=:purchase_time where id = :id';
+            $sql = 'UPDATE products set name=:name, price=:price, is_perishable=:is_perishable, purchase_time=:purchase_time where id = :id';
             $query = $this->con->prepare($sql);
             $query->bindValue(':id', $product->getId());
             $query->bindValue(':name', $product->getName());

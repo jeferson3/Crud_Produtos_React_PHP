@@ -6,6 +6,6 @@ header('Access-Control-Allow-Headers: *');
 header('Content-Type: application/json');
 
 define('ROOT', 'http://localhost:8000'); // url api
-define('ROOT_DIR', $_SERVER["DOCUMENT_ROOT"]); // url api
+define('ROOT_DIR', $_SERVER["DOCUMENT_ROOT"]); // diretório raiz
 
 require "src/routes/web.php";

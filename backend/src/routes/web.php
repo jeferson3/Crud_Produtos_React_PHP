@@ -4,7 +4,6 @@ require ROOT_DIR . '/src/controllers/Product/ProductController.php';
 
 $page   = $_GET['page'] ?? '';
 $method = $_GET['method'] ?? '';
-$id     = $_GET['id'] ?? '';
 
 switch ($page){
 

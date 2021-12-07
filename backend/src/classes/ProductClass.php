@@ -17,13 +17,17 @@ class ProductClass implements JsonSerializable
      */
     private float $price;
     /**
-     * @var bool
+     * @var int
      */
-    private bool $is_perishable;
+    private int $is_perishable;
     /**
      * @var string
      */
     private string $purchase_time;
+    /**
+     * @var int
+     */
+    private int $category_id;
 
     public function __construct(array $data)
     {
@@ -32,6 +36,7 @@ class ProductClass implements JsonSerializable
        $this->setPrice($data['price'] ?? null);
        $this->setIsPerishable($data['is_perishable'] ?? null);
        $this->setPurchaseTime($data['purchase_time'] ?? null);
+       $this->setCategoryId($data['category_id'] ?? null);
     }
 
     /**
@@ -83,17 +88,17 @@ class ProductClass implements JsonSerializable
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function getIsPerishable(): bool
+    public function getIsPerishable(): int
     {
         return $this->is_perishable;
     }
 
     /**
-     * @param bool $is_perishable
+     * @param int $is_perishable
      */
-    public function setIsPerishable(bool $is_perishable): void
+    public function setIsPerishable(int $is_perishable): void
     {
         $this->is_perishable = $is_perishable;
     }
@@ -114,15 +119,31 @@ class ProductClass implements JsonSerializable
         $this->purchase_time = $purchase_time;
     }
 
+    /**
+     * @return int
+     */
+    public function getCategoryId(): int
+    {
+        return $this->category_id;
+    }
 
-    public function jsonSerialize()
+    /**
+     * @param int $category_id
+     */
+    public function setCategoryId(int $category_id): void
+    {
+        $this->category_id = $category_id;
+    }
+
+    public function jsonSerialize(): object
     {
         return (object) [
             'id'            => $this->getId(),
             'name'          => $this->getName(),
             'price'         => $this->getPrice(),
             'is_perishable' => $this->getIsPerishable() == 1,
-            'purchaseTime'  => $this->getPurchaseTime()
+            'purchaseTime'  => $this->getPurchaseTime(),
+            'category_id'   => $this->getCategoryId()
         ];
     }
 }

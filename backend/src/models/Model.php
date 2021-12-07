@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__DIR__) .'/config/Connection.php';
+require_once ROOT_DIR .'/src/config/Connection.php';
 
 class Model
 {

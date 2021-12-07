@@ -27,9 +27,8 @@ final class Product extends Model
             return $data;
         }
         catch (\Exception $exception){
-            var_dump($exception);
+            return false;
         }
-        return false;
     }
 
     /**

@@ -72,11 +72,11 @@ class ProductClass implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getPrice(): string
+    public function getPrice(): array
     {
-        return number_format($this->price, 2, ',', '.');
+        return [$this->price, number_format($this->price, 2, ',', '.')];
     }
 
     /**
@@ -104,11 +104,11 @@ class ProductClass implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getPurchaseTime(): string
+    public function getPurchaseTime(): array
     {
-        return $this->purchase_time;
+        return [$this->purchase_time, date('d/m/Y H:i', strtotime($this->purchase_time))];
     }
 
     /**
@@ -120,11 +120,14 @@ class ProductClass implements JsonSerializable
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getCategoryId(): int
+    public function getCategoryId(): array
     {
-        return $this->category_id;
+        return [
+            $this->category_id,
+            (new Category())->find($this->category_id)->getName()
+        ];
     }
 
     /**
@@ -142,7 +145,7 @@ class ProductClass implements JsonSerializable
             'name'          => $this->getName(),
             'price'         => $this->getPrice(),
             'is_perishable' => $this->getIsPerishable() == 1,
-            'purchaseTime'  => $this->getPurchaseTime(),
+            'purchase_time'  => $this->getPurchaseTime(),
             'category_id'   => $this->getCategoryId()
         ];
     }

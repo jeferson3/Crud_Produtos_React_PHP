@@ -14,10 +14,10 @@ class ProductController extends Controller
             self::response(self::$error);
         }
 
-        $limit = $_POST['limit'] ?? 30;
-        $offset = $_POST['offset'] ?? 0;
+        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+        $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 15;
+        $products = (new Product())->paginate($limit, $page,($page - 1) * $limit);
 
-        $products = (new Product())->paginate($limit, $offset);
         self::response($products);
     }
 
@@ -27,7 +27,7 @@ class ProductController extends Controller
             self::response(self::$error);
         }
 
-        if (self::validate(['name1', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
+        if (self::validate(['name', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
 
             $product = new ProductClass($_POST);
 
@@ -51,12 +51,12 @@ class ProductController extends Controller
 
         $id = $_POST['id'] ?? null;
 
-        if (!is_null($id)) {
-            self::response(self::$error, 404);
+        if (is_null($id)) {
+            self::response(self::$error);
         }
 
         if (!$product = (new Product)->find($id)) {
-            self::response(self::$error, 404);
+            self::response(self::$error);
         }
 
         if (self::validate(['id', 'name', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
@@ -89,12 +89,12 @@ class ProductController extends Controller
 
         $id = $_POST['id'] ?? null;
 
-        if (!is_null($id)) {
-            self::response(self::$error, 404);
+        if (is_null($id)) {
+            self::response(self::$error);
         }
 
-        if (!(new Product)->find($id)) {
-            self::response(self::$error, 404);
+        if (!$product = (new Product)->find($id)) {
+            self::response(self::$error);
         }
 
         $status = (new Product)->delete($id);

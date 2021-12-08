@@ -29,4 +29,33 @@ final class Category extends Model
             return [];
         }
     }
+
+    /**
+     * return category by id
+     *
+     * @param int|null $id category id
+     * @return CategoryClass|null
+     */
+    public function find(?int $id): ?CategoryClass
+    {
+
+        if (is_null($id)) return null;
+
+        try {
+            $sql = "SELECT * from categories where id = :id limit 1";
+            $query = $this->con->prepare($sql);
+            $query->bindValue(':id', $id);
+
+            if ($query->execute()){
+                if ($query->rowCount() > 0){
+                    return (new CategoryClass($query->fetch()));
+                }
+                return null;
+            }
+            return null;
+        }
+        catch (PDOException $exception){
+            return null;
+        }
+    }
 }

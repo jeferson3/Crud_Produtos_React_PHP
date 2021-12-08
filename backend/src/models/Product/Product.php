@@ -6,7 +6,7 @@ require_once ROOT_DIR . '/src/classes/ProductClass.php';
 final class Product extends Model
 {
 
-    public function paginate($limit = 10, $offset = 0)
+    public function paginate($limit = 10, $page = 1, $offset = 0)
     {
         try {
 
@@ -21,8 +21,11 @@ final class Product extends Model
                 foreach ($query->fetchAll() as $value){
                     array_push($data['result'], (new ProductClass($value)));
                 }
-                $data['page'] = $offset + 1;
-                $data['total'] = count($this->all());
+                $total = count($this->all());
+                $data['page'] = $page;
+                $data['total_pages'] = ceil($total / $limit);
+                $data['per_page'] = $limit;
+                $data['total'] = $total;
             }
             return $data;
         }
@@ -102,10 +105,10 @@ final class Product extends Model
 
             $query = $this->con->prepare($sql);
             $query->bindValue(':name', $product->getName());
-            $query->bindValue(':price', $product->getPrice());
+            $query->bindValue(':price', $product->getPrice()[0]);
             $query->bindValue(':is_perishable', $product->getIsPerishable());
-            $query->bindValue(':purchase_time', $product->getPurchaseTime());
-            $query->bindValue(':category_id', $product->getCategoryId());
+            $query->bindValue(':purchase_time', $product->getPurchaseTime()[0]);
+            $query->bindValue(':category_id', $product->getCategoryId()[0]);
 
             return $query->execute();
         }
@@ -149,9 +152,9 @@ final class Product extends Model
             $query = $this->con->prepare($sql);
             $query->bindValue(':id', $product->getId());
             $query->bindValue(':name', $product->getName());
-            $query->bindValue(':price', $product->getPrice());
+            $query->bindValue(':price', $product->getPrice()[0]);
             $query->bindValue(':is_perishable', $product->getIsPerishable());
-            $query->bindValue(':purchase_time', $product->getPurchaseTime());
+            $query->bindValue(':purchase_time', $product->getPurchaseTime()[0]);
 
             return $query->execute();
         }

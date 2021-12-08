@@ -10,8 +10,12 @@ class ProductController extends Controller
     public static function index()
     {
 
-        $limit = self::request()['limit'] ?? 10;
-        $offset = self::request()['offset'] ?? 0;
+        if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
+            self::response(self::$error);
+        }
+
+        $limit = $_POST['limit'] ?? 30;
+        $offset = $_POST['offset'] ?? 0;
 
         $products = (new Product())->paginate($limit, $offset);
         self::response($products);
@@ -20,32 +24,34 @@ class ProductController extends Controller
     public static function store()
     {
         if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
-            self::response(self::$error, 405);
+            self::response(self::$error);
         }
 
-        if (self::validate(['name', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
+        if (self::validate(['name1', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
 
-            $product = new ProductClass(self::request());
+            $product = new ProductClass($_POST);
 
             $status = (new Product)->create($product);
 
             if ($status) {
-                self::response(self::$success, 201);
+                self::response(self::$success);
             }
 
-            self::response(self::$error, 400);
+            self::response(self::$error);
         }
 
-        self::response(self::$error, 400);
+        self::response(self::$error);
     }
 
     public static function update()
     {
         if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
-            self::response(self::$error, 405);
+            self::response(self::$error);
         }
 
-        if (!$id = self::request()['id']) {
+        $id = $_POST['id'] ?? null;
+
+        if (!is_null($id)) {
             self::response(self::$error, 404);
         }
 
@@ -55,37 +61,39 @@ class ProductController extends Controller
 
         if (self::validate(['id', 'name', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
 
-            $product->setId(self::request()['id']);
-            $product->setName(self::request()['name']);
-            $product->setPrice(self::request()['price']);
-            $product->setIsPerishable(self::request()['is_perishable']);
-            $product->setPurchaseTime(self::request()['purchase_time']);
-            $product->setCategoryId(self::request()['category_id']);
+            $product->setId($_POST['id']);
+            $product->setName($_POST['name']);
+            $product->setPrice($_POST['price']);
+            $product->setIsPerishable($_POST['is_perishable']);
+            $product->setPurchaseTime($_POST['purchase_time']);
+            $product->setCategoryId($_POST['category_id']);
 
             $status = (new Product)->update($product);
 
             if ($status) {
-                self::response(self::$success, 201);
+                self::response(self::$success);
             }
 
-            self::response(self::$error, 400);
+            self::response(self::$error);
 
         }
 
-        self::response(self::$error, 400);
+        self::response(self::$error);
     }
 
     public static function delete()
     {
         if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
-            self::response(self::$error, 405);
+            self::response(self::$error);
         }
 
-        if (!$id = self::request()['id']) {
+        $id = $_POST['id'] ?? null;
+
+        if (!is_null($id)) {
             self::response(self::$error, 404);
         }
 
-        if (!$product = (new Product)->find($id)) {
+        if (!(new Product)->find($id)) {
             self::response(self::$error, 404);
         }
 
@@ -94,6 +102,6 @@ class ProductController extends Controller
         if ($status){
             self::response(self::$success);
         }
-        self::response(self::$error, 400);
+        self::response(self::$error);
     }
 }

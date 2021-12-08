@@ -13,27 +13,20 @@ class Controller
         'message'   => 'Operação realizada com sucesso!'
     ];
 
-    protected static function validate(array $data, string $type = 'GET')
+    protected static function validate(array $data)
     {
-        $request = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($_POST)) return false;
 
         foreach ($data as $value){
-            if (!array_key_exists($value, $request) || empty($request[$value])) return false;
+            if (!array_key_exists($value, $_POST) || empty($_POST[$value])) return false;
         }
         return true;
     }
 
-    public static function response($data, int $status_code = 200)
+    public static function response($data)
     {
-        http_response_code($status_code);
         echo json_encode($data);
         exit();
     }
-
-    public static function request()
-    {
-        return json_decode(file_get_contents('php://input'), true);
-    }
-
-
 }

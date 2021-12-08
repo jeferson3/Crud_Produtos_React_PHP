@@ -1,3 +1,8 @@
 export const data = {
-    loading: false
+    loading: false,
+    toast: {
+        status: false,
+        type: 'primary',
+        msg: ''
+    }
 }

@@ -7,6 +7,7 @@ import { GlobalStyle } from './Styles/global-style';
 import App from './Pages/Products/List';
 import { GlobalContextProvider } from './Context/GlobalContext';
 import { SpinnerContainer } from './Components/Spinner';
+import { ToastNotification } from './Components/Toast';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,6 +15,7 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <GlobalContextProvider>
         <SpinnerContainer />
+        <ToastNotification />
         <App />
       </GlobalContextProvider>
     </ThemeProvider>

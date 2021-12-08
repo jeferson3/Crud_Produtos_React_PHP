@@ -14,4 +14,11 @@ export const GlobalStyle = createGlobalStyle`
         color: red;
     }
 
+    .page-item{
+        cursor: pointer;
+    }
+    .disabled{
+        cursor: not-allowed !important;
+    }
+
 `

@@ -108,7 +108,7 @@ class ProductClass implements JsonSerializable
      */
     public function getPurchaseTime(): array
     {
-        return [$this->purchase_time, date('d/m/Y H:i', strtotime($this->purchase_time))];
+        return [date('Y-m-d\TH:i', strtotime($this->purchase_time)), date('d/m/Y H:i', strtotime($this->purchase_time))];
     }
 
     /**

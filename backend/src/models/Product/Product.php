@@ -148,13 +148,15 @@ final class Product extends Model
     {
         try {
 
-            $sql = 'UPDATE products set name=:name, price=:price, is_perishable=:is_perishable, purchase_time=:purchase_time where id = :id';
+            $sql = 'UPDATE products set name=:name, price=:price, is_perishable=:is_perishable, 
+                    purchase_time=:purchase_time, category_id=:category_id where id = :id';
             $query = $this->con->prepare($sql);
             $query->bindValue(':id', $product->getId());
             $query->bindValue(':name', $product->getName());
             $query->bindValue(':price', $product->getPrice()[0]);
             $query->bindValue(':is_perishable', $product->getIsPerishable());
             $query->bindValue(':purchase_time', $product->getPurchaseTime()[0]);
+            $query->bindValue(':category_id', $product->getCategoryId()[0]);
 
             return $query->execute();
         }

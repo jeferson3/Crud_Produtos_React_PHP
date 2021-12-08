@@ -26,7 +26,7 @@ export const ProductCard = ({ product, getProducts }) => {
     const [categories, setCategories] = useState([]);
 
     const disableButtonSave = (!inputName || !inputPrice || !inputCategoryId ||
-        !inputPurchaseTime || (inputPerishable == null || inputPerishable == undefined));
+        !inputPurchaseTime || (inputPerishable === null || inputPerishable === undefined));
 
     const handleSubmitFormDelete = async () => {
 

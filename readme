@@ -1,6 +1,6 @@
 
 Start Backend:
-php -S localhosst:8000
+php -S localhost:8000
 
 Start Frontend:
 npm i

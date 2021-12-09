@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button, Col, FloatingLabel, Form, Modal, Row } from "react-bootstrap"
-import { setLoading, setToast } from "../../Context/GlobalContext/actions";
+import { getProducts, setLoading, setToast } from "../../Context/GlobalContext/actions";
 import { useGlobalContext } from "../../Context/GlobalContext/context";
 import { env } from "../../Environment";
 
-export const ProductCard = ({ product, getProducts }) => {
+export const ProductCard = ({ product }) => {
 
-    const { state: { toast }, dispatch } = useGlobalContext();
+    const { state: { toast }, state: { products }, dispatch } = useGlobalContext();
 
     const [showFormDelete, setShowFormDelete] = useState(false);
     const handleCloseFormDelete = () => setShowFormDelete(false);
@@ -48,12 +48,10 @@ export const ProductCard = ({ product, getProducts }) => {
         if (json.status) setToast(dispatch, { ...toast, status: true, type: 'primary', msg: json.message })
         else setToast(dispatch, { ...toast, status: true, type: 'danger', msg: json.message })
 
-        getProducts();
+        getProducts(products.page, products.per_page, dispatch);
     }
 
     const handleSubmitFormUpdate = async () => {
-
-        console.log(inputCategoryId);
 
         handleCloseFormEdit();
 
@@ -80,7 +78,7 @@ export const ProductCard = ({ product, getProducts }) => {
         if (json.status) setToast(dispatch, { ...toast, status: true, type: 'primary', msg: json.message })
         else setToast(dispatch, { ...toast, status: true, type: 'danger', msg: json.message })
 
-        getProducts();
+        getProducts(products.page, products.per_page, dispatch);
     }
 
     useEffect(() => {

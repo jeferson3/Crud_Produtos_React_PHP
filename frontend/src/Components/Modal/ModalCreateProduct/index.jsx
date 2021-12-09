@@ -2,16 +2,16 @@ import { useEffect, useState } from "react"
 import { Button, Col, FloatingLabel, Form, Modal, Row } from "react-bootstrap"
 import { env } from "../../../Environment";
 import { useGlobalContext } from "../../../Context/GlobalContext/context";
-import { setLoading, setToast } from "../../../Context/GlobalContext/actions";
+import { getProducts, setLoading, setToast } from "../../../Context/GlobalContext/actions";
 
-export const ModalCreateProduct = ({ show, handleClose, getProducts }) => {
+export const ModalCreateProduct = ({ show, handleClose }) => {
 
-  const { state: {toast}, dispatch } = useGlobalContext();
+  const { state: { toast, products }, dispatch } = useGlobalContext();
 
-  const [inputName, setInputName] = useState('name');
-  const [inputPrice, setInputPrice] = useState(100);
-  const [inputCategoryId, setInputCategoryId] = useState(1);
-  const [inputPurchaseTime, setInputPurchaseTime] = useState('2021-10-10 12:03');
+  const [inputName, setInputName] = useState();
+  const [inputPrice, setInputPrice] = useState();
+  const [inputCategoryId, setInputCategoryId] = useState();
+  const [inputPurchaseTime, setInputPurchaseTime] = useState();
   const [inputPerishable, setInputPerishable] = useState(1);
 
   const [categories, setCategories] = useState([]);
@@ -49,10 +49,10 @@ export const ModalCreateProduct = ({ show, handleClose, getProducts }) => {
 
     setLoading(dispatch);
 
-    if (json.status) setToast(dispatch, {...toast, status: true, type: 'primary', msg: json.message})
-    else  setToast(dispatch, {...toast, status: true, type: 'danger', msg: json.message})
+    if (json.status) setToast(dispatch, { ...toast, status: true, type: 'primary', msg: json.message })
+    else setToast(dispatch, { ...toast, status: true, type: 'danger', msg: json.message })
 
-    getProducts();
+    getProducts(products.page, products.per_page, dispatch);
     clearInputs()
 
   }

@@ -1,1 +1,7 @@
 
+Start Backend:
+php -S localhosst:8000
+
+Start Frontend:
+npm i
+npm start

@@ -21,7 +21,7 @@ class CategoryController extends Controller
         catch (\Exception $th){
 
             if ($th->getCode() == 2002) {
-                self::response(['message' => self::$database_error], 2002);
+                self::response(['message' => self::$database_error], 500);
             }
 
             self::response(['message' => $th->getMessage()], $th->getCode());

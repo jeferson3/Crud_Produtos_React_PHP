@@ -5,15 +5,13 @@ import { getCategories, getProducts, saveProducts } from "../../../Context/Globa
 
 export const ModalCreateProduct = ({ show, handleClose }) => {
 
-  const { state: { products }, dispatch } = useGlobalContext();
+  const { state: { products, categories }, dispatch } = useGlobalContext();
 
   const [inputName, setInputName] = useState();
   const [inputPrice, setInputPrice] = useState();
   const [inputCategoryId, setInputCategoryId] = useState();
   const [inputPurchaseTime, setInputPurchaseTime] = useState();
   const [inputPerishable, setInputPerishable] = useState(1);
-
-  const [categories, setCategories] = useState([]);
 
   const disableButtonSave = (!inputName || !inputPrice || !inputCategoryId ||
     !inputPurchaseTime || !inputPerishable);
@@ -44,7 +42,7 @@ export const ModalCreateProduct = ({ show, handleClose }) => {
   }
 
   useEffect(() => {
-    getCategories(setCategories);
+    getCategories(dispatch);
   }, [dispatch])
 
   return (
@@ -76,7 +74,7 @@ export const ModalCreateProduct = ({ show, handleClose }) => {
                 <Form.Group className="pb-2">
                   <FloatingLabel controlId="category_id" label="Categoria">
                     <Form.Select onChange={e => setInputCategoryId(e.target.value)}>
-                      <option>Selecione uma cetegoria</option>
+                      <option>Selecione uma categoria</option>
                       {!!categories && categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </Form.Select>
                   </FloatingLabel>

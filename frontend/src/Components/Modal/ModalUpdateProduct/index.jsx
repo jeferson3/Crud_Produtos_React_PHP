@@ -1,19 +1,17 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Button, Col, FloatingLabel, Form, Modal, Row } from "react-bootstrap"
 import { useGlobalContext } from "../../../Context/GlobalContext/context";
-import { getCategories, getProducts, updateProducts } from "../../../Context/GlobalContext/actions";
+import { getProducts, updateProducts } from "../../../Context/GlobalContext/actions";
 
 export const ModalUpdateProduct = ({ product, show, handleClose }) => {
 
-  const { state: { products }, dispatch } = useGlobalContext();
+  const { state: { products, categories }, dispatch } = useGlobalContext();
 
   const [inputName, setInputName] = useState(product.name);
   const [inputPrice, setInputPrice] = useState(product.price[0]);
   const [inputCategoryId, setInputCategoryId] = useState(product.category_id[0]);
   const [inputPurchaseTime, setInputPurchaseTime] = useState(product.purchase_time[0]);
   const [inputPerishable, setInputPerishable] = useState(product.is_perishable ? 1 : 2);
-
-  const [categories, setCategories] = useState([]);
 
   const disableButtonSave = (!inputName || !inputPrice || !inputCategoryId ||
     !inputPurchaseTime || !inputPerishable);
@@ -34,10 +32,6 @@ export const ModalUpdateProduct = ({ product, show, handleClose }) => {
     getProducts(products.page, products.per_page, dispatch);
 
   }
-
-  useEffect(() => {
-    getCategories(setCategories);
-  }, [dispatch])
 
   return (
     <>
@@ -68,7 +62,7 @@ export const ModalUpdateProduct = ({ product, show, handleClose }) => {
                 <Form.Group className="pb-2">
                   <FloatingLabel controlId="category_id" label="Categoria">
                     <Form.Select onChange={e => setInputCategoryId(e.target.value)} defaultValue={inputCategoryId}>
-                      <option>{"Selecione uma cetegoria"}</option>
+                      <option>{"Selecione uma categoria"}</option>
                       {!!categories && categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </Form.Select>
                   </FloatingLabel>

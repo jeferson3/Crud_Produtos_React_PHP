@@ -9,6 +9,8 @@ export const reducer = (state, action) => {
             return { ...state, toast: action.payload }
         case types.SET_PRODUCTS:
             return { ...state, products: action.payload }
+        case types.SET_CATEGORIES:
+            return { ...state, categories: action.payload }
         case types.PAGINATION_SET_PAGE:
             return { ...state, products: { ...state.products, page: action.payload } }
         default:

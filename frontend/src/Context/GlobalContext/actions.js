@@ -12,14 +12,22 @@ export const setProducts = (dispatch, payload) => {
     dispatch({ type: types.SET_TOAST, payload })
 }
 
-export const getCategories = (setCategories) => {
+export const getCategories = (dispatch) => {
     fetch(env.api.url.dev + '?page=categories&method=list',
         {
             method: 'POST',
             mode: 'cors'
         })
-        .then(r => r.json())
-        .then(r => setCategories(r))
+        .then(async r => {
+
+            let res = await r.json();
+
+            if (r.status === 200) {
+                dispatch({ type: types.SET_CATEGORIES, payload: res })
+            }
+        })
+
+
 }
 
 export const getProducts = (page, per_page, dispatch) => {

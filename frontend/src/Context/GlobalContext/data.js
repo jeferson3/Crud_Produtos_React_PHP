@@ -11,5 +11,6 @@ export const data = {
         page: 1,
         per_page: 5,
         total_pages: 0
-    }
+    },
+    categories: []
 }

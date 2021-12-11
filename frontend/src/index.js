@@ -4,7 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from './Styles/theme';
 import { GlobalStyle } from './Styles/global-style';
 
-import App from './Pages/Products/List';
+import App from './Pages/Products';
 import { GlobalContextProvider } from './Context/GlobalContext';
 import { SpinnerContainer } from './Components/Spinner';
 import { ToastNotification } from './Components/Toast';

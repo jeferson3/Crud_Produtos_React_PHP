@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "react-bootstrap";
-import { ModalCreateProduct } from "../../../Components/Modal/ModalCreateProduct";
-import { ProductCard } from "../../../Components/Product";
-import { getProducts, paginationSetPage } from "../../../Context/GlobalContext/actions";
-import { useGlobalContext } from "../../../Context/GlobalContext/context";
+import { getProducts, paginationSetPage } from "../../Context/GlobalContext/actions";
+import { useGlobalContext } from "../../Context/GlobalContext/context";
+import { ModalCreateProduct } from "../../Components/Modal/ModalCreateProduct";
+import { ProductCard } from "../../Components/Product";
 
 function App() {
 
@@ -16,7 +16,6 @@ function App() {
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const nextPage = () => {
     goToPage(page + 1);
@@ -69,7 +68,6 @@ function App() {
       <ModalCreateProduct
         show={show}
         handleClose={handleClose}
-        handleShow={handleShow}
       />
 
 

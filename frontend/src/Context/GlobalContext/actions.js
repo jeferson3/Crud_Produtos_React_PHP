@@ -12,21 +12,148 @@ export const setProducts = (dispatch, payload) => {
     dispatch({ type: types.SET_TOAST, payload })
 }
 
-export const getProducts = async (page, per_page, dispatch) => {
+export const getCategories = (setCategories) => {
+    fetch(env.api.url.dev + '?page=categories&method=list',
+        {
+            method: 'POST',
+            mode: 'cors'
+        })
+        .then(r => r.json())
+        .then(r => setCategories(r))
+}
+
+export const getProducts = (page, per_page, dispatch) => {
     setLoading(dispatch);
 
     const body = new FormData();
     body.append('page', page)
     body.append('limit', per_page)
 
-    const res = await fetch(env.api.url.dev + '?page=products&method=list', {
-            method: 'post',
-            body
+    fetch(env.api.url.dev + '?page=products&method=list', {
+        method: 'POST',
+        mode: 'cors',
+        body
+    })
+        .then(async r => {
+
+            let res = await r.json();
+
+            if (r.status === 200) {
+                dispatch({ type: types.SET_PRODUCTS, payload: res })
+            }
+            else {
+                setToast(dispatch, { status: true, type: 'danger', msg: res.message })
+            }
         })
-    const json = await res.json();
+
+        .catch(err => {
+            setToast(dispatch, { status: true, type: 'danger', msg: "Aconteceu um erro inesperado!" })
+        })
+        .finally(() => {
+            setLoading(dispatch);
+        })
+
+
+}
+
+export const saveProducts = (dispatch, data) => {
 
     setLoading(dispatch);
-    dispatch({ type: types.SET_PRODUCTS, payload: json });
+
+    const body = new FormData();
+    body.append('name', data.inputName);
+    body.append('price', data.inputPrice);
+    body.append('category_id', data.inputCategoryId);
+    body.append('purchase_time', data.inputPurchaseTime);
+    body.append('is_perishable', data.inputPerishable);
+
+    fetch(env.api.url.dev + '?page=products&method=create',
+        {
+            method: 'POST',
+            body
+        })
+        .then(async r => {
+
+            let json = await r.json();
+
+            if (r.status === 201) {
+                setToast(dispatch, { status: true, type: 'primary', msg: json })
+            }
+            else {
+                setToast(dispatch, { status: true, type: 'danger', msg: json.message })
+            }
+        })
+        .catch(err => {
+            setToast(dispatch, { status: true, type: 'danger', msg: "Aconteceu um erro inesperado!" })
+        })
+        .finally(() => {
+            setLoading(dispatch);
+        })
+
+}
+
+export const updateProducts = (dispatch, data) => {
+
+    setLoading(dispatch);
+
+    const body = new FormData();
+    body.append('id', data.id);
+    body.append('name', data.inputName);
+    body.append('price', data.inputPrice);
+    body.append('category_id', data.inputCategoryId);
+    body.append('purchase_time', data.inputPurchaseTime);
+    body.append('is_perishable', data.inputPerishable);
+
+    fetch(env.api.url.dev + '?page=products&method=update',
+        {
+            method: 'POST',
+            body
+        })
+        .then(async r => {
+
+            let json = await r.json();
+
+            if (r.status === 200) {
+                setToast(dispatch, { status: true, type: 'primary', msg: json })
+            }
+            else {
+                setToast(dispatch, { status: true, type: 'danger', msg: json.message })
+            }
+        })
+        .catch(err => {
+            setToast(dispatch, { status: true, type: 'danger', msg: "Aconteceu um erro inesperado!" })
+        })
+        .finally(() => {
+            setLoading(dispatch);
+        })
+
+}
+
+export const deleteProducts = (dispatch, data) => {
+
+    const body = new FormData();
+    body.append('id', data.id);
+
+    fetch(env.api.url.dev + '?page=products&method=delete',
+        {
+            method: 'POST',
+            body
+        })
+
+        .then(async r => {
+
+            let json = await r.json();
+
+            if (r.status === 200) {
+                setToast(dispatch, { status: true, type: 'primary', msg: json })
+            }
+            else {
+                setToast(dispatch, { status: true, type: 'danger', msg: json.message })
+            }
+        })
+        .catch(err => {
+            setToast(dispatch, { status: true, type: 'danger', msg: "Aconteceu um erro inesperado!" })
+        })
 }
 
 export const paginationSetPage = (dispatch, page) => {

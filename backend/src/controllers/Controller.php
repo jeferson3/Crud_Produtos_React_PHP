@@ -3,15 +3,9 @@
 class Controller
 {
 
-    protected static array $error = [
-        'status'    => false,
-        'message'   => 'Não foi possível realizar a operação!'
-    ];
-
-    protected static array $success = [
-        'status'    => true,
-        'message'   => 'Operação realizada com sucesso!'
-    ];
+    protected static string $error = 'Não foi possível realizar a operação, consulte o suporte técnico!';
+    protected static string $database_error = 'Erro no banco de dados, consulte o suporte técnico!';
+    protected static string $success = 'Operação realizada com sucesso!';
 
     protected static function validate(array $data)
     {
@@ -24,8 +18,9 @@ class Controller
         return true;
     }
 
-    public static function response($data)
+    public static function response($data, $status_code = 200)
     {
+        http_response_code($status_code);
         echo json_encode($data);
         exit();
     }

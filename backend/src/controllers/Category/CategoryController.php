@@ -10,9 +10,21 @@ class CategoryController extends Controller
     public static function index()
     {
         if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
-            self::response(self::$error, 404);
+            self::response(self::$error, 405);
         }
-        $categories = (new Category)->all();
-        self::response($categories);
+        try {
+
+            $categories = (new Category)->all();
+            self::response($categories);
+        }
+
+        catch (\Exception $th){
+
+            if ($th->getCode() == 2002) {
+                self::response(['message' => self::$database_error], 2002);
+            }
+
+            self::response(['message' => $th->getMessage()], $th->getCode());
+        }
     }
 }

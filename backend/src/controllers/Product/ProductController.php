@@ -10,98 +10,130 @@ class ProductController extends Controller
     public static function index()
     {
 
-        if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
-            self::response(self::$error);
+        try {
+            $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+            $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 15;
+            $products = (new Product())->paginate($limit, $page,($page - 1) * $limit);
+    
+            self::response($products);
+
+        } catch (\Throwable $th) {
+
+            if ($th->getCode() == 2002) {
+                self::response(['message' => self::$database_error], 500);
+            }
+
+            self::response(['message' => $th->getMessage()], $th->getCode());
         }
-
-        $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-        $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 15;
-        $products = (new Product())->paginate($limit, $page,($page - 1) * $limit);
-
-        self::response($products);
     }
 
     public static function store()
     {
-        if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
-            self::response(self::$error);
-        }
 
-        if (self::validate(['name', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
+        try {
 
-            $product = new ProductClass($_POST);
+            if (self::validate(['name', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
 
-            $status = (new Product)->create($product);
+                $product = new ProductClass($_POST);
 
-            if ($status) {
-                self::response(self::$success);
+                $status = (new Product)->create($product);
+
+                if ($status) {
+                    self::response(self::$success, 201);
+                }
+
+                throw new Exception(self::$error, 501);
             }
 
-            self::response(self::$error);
-        }
+            throw new Exception(self::$error, 400);
 
-        self::response(self::$error);
+        }
+        catch (\Exception $th){
+
+            if ($th->getCode() == 2002) {
+                self::response(['message' => self::$database_error], 2002);
+            }
+
+            self::response(['message' => $th->getMessage()], $th->getCode());
+        }
     }
 
     public static function update()
     {
-        if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
-            self::response(self::$error);
-        }
 
-        $id = $_POST['id'] ?? null;
+        try {
+            $id = $_POST['id'] ?? null;
 
-        if (is_null($id)) {
-            self::response(self::$error);
-        }
-
-        if (!$product = (new Product)->find($id)) {
-            self::response(self::$error);
-        }
-
-        if (self::validate(['id', 'name', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
-
-            $product->setId($_POST['id']);
-            $product->setName($_POST['name']);
-            $product->setPrice($_POST['price']);
-            $product->setIsPerishable($_POST['is_perishable']);
-            $product->setPurchaseTime($_POST['purchase_time']);
-            $product->setCategoryId($_POST['category_id']);
-
-            $status = (new Product)->update($product);
-
-            if ($status) {
-                self::response(self::$success);
+            if (is_null($id)) {
+                throw new Exception(self::$error, 400);
             }
 
-            self::response(self::$error);
+            if (!$product = (new Product)->find($id)) {
+                throw new Exception(self::$error, 404);
+            }
 
+            if (self::validate(['id', 'name', 'price', 'is_perishable', 'purchase_time', 'category_id'])) {
+
+                $product->setId($_POST['id']);
+                $product->setName($_POST['name']);
+                $product->setPrice($_POST['price']);
+                $product->setIsPerishable($_POST['is_perishable']);
+                $product->setPurchaseTime($_POST['purchase_time']);
+                $product->setCategoryId($_POST['category_id']);
+
+                $status = (new Product)->update($product);
+
+                if ($status) {
+                    self::response(self::$success);
+                }
+
+                throw new Exception(self::$error, 500);
+
+            }
+            throw new Exception(self::$error, 400);
         }
 
-        self::response(self::$error);
+        catch (\Exception $th){
+
+            if ($th->getCode() == 2002) {
+                self::response(['message' => self::$database_error], 2002);
+            }
+
+            self::response(['message' => $th->getMessage()], $th->getCode());
+        }
     }
 
     public static function delete()
     {
-        if(strtolower($_SERVER['REQUEST_METHOD']) != 'post'){
-            self::response(self::$error);
+
+        try {
+
+            $id = $_POST['id'] ?? null;
+
+            if (is_null($id)) {
+                throw new Exception(self::$error, 400);
+            }
+
+            if (!$product = (new Product)->find($id)) {
+                throw new Exception(self::$error, 404);
+            }
+
+            $status = (new Product)->delete($id);
+
+            if ($status) {
+                self::response(self::$success);
+            }
+            throw new Exception(self::$error, 500);
         }
 
-        $id = $_POST['id'] ?? null;
+        catch (\Exception $th){
 
-        if (is_null($id)) {
-            self::response(self::$error);
+            if ($th->getCode() == 2002) {
+                self::response(['message' => self::$database_error], 2002);
+            }
+
+            self::response(['message' => $th->getMessage()], $th->getCode());
         }
 
-        if (!$product = (new Product)->find($id)) {
-            self::response(self::$error);
-        }
-
-        $status = (new Product)->delete($id);
-
-        if ($status){
-            self::response(self::$success);
-        }
-        self::response(self::$error);
     }
 }

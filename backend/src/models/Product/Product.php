@@ -15,16 +15,14 @@ final class Product extends Model
             $query->bindParam(':limit', $limit, PDO::PARAM_INT);
             $query->bindParam(':offset', $offset, PDO::PARAM_INT);
 
-            $data = array('result' => array(), 'total' => 0);
+            $data = array('result' => array(), 'page' => $page, 'per_page' => $limit, 'total' => 0, 'total_pages' => 0, );
 
             if ($query->execute() && $query->rowCount() > 0){
                 foreach ($query->fetchAll() as $value){
                     array_push($data['result'], (new ProductClass($value)));
                 }
                 $total = count($this->all());
-                $data['page'] = $page;
                 $data['total_pages'] = ceil($total / $limit);
-                $data['per_page'] = $limit;
                 $data['total'] = $total;
             }
             return $data;

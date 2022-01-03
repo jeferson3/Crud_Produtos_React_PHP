@@ -34,9 +34,9 @@ export const ModalCreateProduct = ({ show, handleClose }) => {
       inputCategoryId,
       inputPurchaseTime,
       inputPerishable
-    })
+      
+    }, products)
 
-    getProducts(products.page, products.per_page, dispatch);
     clearInputs()
 
   }

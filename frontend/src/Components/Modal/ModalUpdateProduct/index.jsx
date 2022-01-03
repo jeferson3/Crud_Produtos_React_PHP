@@ -27,9 +27,8 @@ export const ModalUpdateProduct = ({ product, show, handleClose }) => {
       inputCategoryId,
       inputPurchaseTime,
       inputPerishable
-    })
 
-    getProducts(products.page, products.per_page, dispatch);
+    }, products)
 
   }
 

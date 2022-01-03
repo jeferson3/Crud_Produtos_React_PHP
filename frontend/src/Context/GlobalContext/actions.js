@@ -64,7 +64,7 @@ export const getProducts = (page, per_page, dispatch) => {
 
 }
 
-export const saveProducts = (dispatch, data) => {
+export const saveProducts = (dispatch, data, products) => {
 
     setLoading(dispatch);
 
@@ -95,12 +95,13 @@ export const saveProducts = (dispatch, data) => {
             setToast(dispatch, { status: true, type: 'danger', msg: "Aconteceu um erro inesperado!" })
         })
         .finally(() => {
+            getProducts(products.page, products.per_page, dispatch)
             setLoading(dispatch);
         })
 
 }
 
-export const updateProducts = (dispatch, data) => {
+export const updateProducts = (dispatch, data, products) => {
 
     setLoading(dispatch);
 
@@ -133,6 +134,7 @@ export const updateProducts = (dispatch, data) => {
         })
         .finally(() => {
             setLoading(dispatch);
+            getProducts(products.page, products.per_page, dispatch)
         })
 
 }

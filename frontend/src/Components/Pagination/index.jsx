@@ -32,7 +32,7 @@ export const Pagination = ({ page, perPage, setPage }) => {
                         </li>
                     )
                 })}
-                <li className={products.page === products.total_pages ? "page-item disabled" : "page-item"}>
+                <li className={(products.page === products.total_pages || products.total_pages === 0) ? "page-item disabled" : "page-item"}>
                     <a href="#/" className="page-link" onClick={() => nextPage()}>Next</a>
                 </li>
             </ul>

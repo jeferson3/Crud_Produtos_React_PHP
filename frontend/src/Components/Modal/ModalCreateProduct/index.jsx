@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Button, Col, FloatingLabel, Form, Modal, Row } from "react-bootstrap"
 import { useGlobalContext } from "../../../Context/GlobalContext/context";
-import { getCategories, getProducts, saveProducts } from "../../../Context/GlobalContext/actions";
+import { getCategories, saveProducts } from "../../../Context/GlobalContext/actions";
 
 export const ModalCreateProduct = ({ show, handleClose }) => {
 

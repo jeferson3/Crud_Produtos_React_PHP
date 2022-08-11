@@ -1,4 +1,4 @@
-## Crud de livros com React JS, PHP e Mysql
+## Crud de lista de compras com React JS, PHP e Mysql
 
 ## Processo de instalação e configuração
 

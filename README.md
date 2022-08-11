@@ -23,3 +23,15 @@ Instalação Frontend:
 - npm install
 - npm start
 
+ # listagem
+ ![image](images/img1.png)
+
+# adicionar
+![image](images/img2.png)
+
+# editar
+![image](images/img3.png)
+
+# deletar
+![image](images/img4.png)
+
